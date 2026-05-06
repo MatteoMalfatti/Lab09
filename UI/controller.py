@@ -9,9 +9,35 @@ class Controller:
         self._model = model
 
     def handle_hello(self, e):
-        name = self._view.txt_name.value
-        if name is None or name == "":
+        self._view.txt_result.clean()
+        self._view.update_page()
+        distanzamin = self._view.txt_name.value
+        if distanzamin is None or distanzamin == "":
             self._view.create_alert("Inserire il nome")
             return
-        self._view.txt_result.controls.append(ft.Text(f"Hello, {name}!"))
+        try:
+            int(distanzamin)
+        except ValueError:
+            self._view.txt_result.controls.append(ft.Text("Inserire un intero!"))
+            self._view.update_page()
+            return
+        lista=self._model.buildGraph(distanzamin)
+        self._view.txt_result.controls.append(ft.Text("Grafo correttamente creato!!"))
+        self._view.txt_result.controls.append(ft.Text(f"Numero archi {self._model.getNumNodes()}"))
+        self._view.txt_result.controls.append(ft.Text(f"Numero archi {self._model.getNumEdges()}"))
+        for n in lista:
+            self._view.txt_result.controls.append(ft.Text(f"{n}"))
+
+        self._view.update_page()
+
+
+
+
+
+
+
+
+
+
+
         self._view.update_page()
